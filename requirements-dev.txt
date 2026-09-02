@@ -1,0 +1,14 @@
+# Local development and test dependencies. Render never installs this file.
+#
+# CoolProp is here and not in requirements.txt on purpose: it is a large C++ extension
+# whose build is slow enough to threaten a deploy, and the only thing that ever imports
+# it is StateFunctionCalculator/test/test_comparison.py, which checks this project's
+# transcribed Helmholtz coefficients against a reference implementation. Production
+# computes states from the coefficients themselves and never calls CoolProp.
+#
+#   pip install -r requirements-dev.txt
+
+-r requirements.txt
+
+CoolProp==7.2.0
+pytest==9.0.3

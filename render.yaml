@@ -1,0 +1,60 @@
+# Render Blueprint. Deploy with: New > Blueprint, pointed at this repository.
+#
+# The numbers below are not defaults, they are measured on this application:
+# after the symbolic warm-up in web_app/app.py a worker holds ~178 MB, and a
+# starter/free instance has 512 MB. Two forked workers fit only because --preload
+# does the import and the warm-up once in the master, so the sympy expressions,
+# matplotlib and pandas are shared copy-on-write instead of paid for twice.
+# Raising --workers past 2 without re-measuring will OOM the instance.
+
+services:
+  - type: web
+    name: cryocalculator
+    runtime: python
+    # `starter` keeps the instance warm. `free` also has 512 MB and the same worker
+    # arithmetic holds, but it spins down after 15 minutes idle and the next visitor
+    # pays the full cold start: ~3.7 s of import and warm-up on top of the boot.
+    plan: starter
+    region: frankfurt
+    healthCheckPath: /healthz
+    buildCommand: pip install -r requirements.txt
+    # --chdir is required, not cosmetic: app.py imports its siblings by bare name
+    # (`import backend_bridge`), so web_app has to be the working directory.
+    # --timeout is short because every callback in this app answers in milliseconds
+    # (0.5 ms for a state, 10 ms for a scan); a request still running after 30 s is
+    # a stuck worker, not a slow calculation.
+    startCommand: >-
+      gunicorn app:server
+      --chdir web_app
+      --bind 0.0.0.0:$PORT
+      --worker-class gthread
+      --workers 2
+      --threads 4
+      --preload
+      --timeout 30
+      --graceful-timeout 20
+      --max-requests 800
+      --max-requests-jitter 80
+      --access-logfile -
+      --error-logfile -
+    envVars:
+      # Kept in step with .python-version. pandas 3.0.3 and numpy 2.4.5 are pinned to
+      # wheels built for this interpreter; letting Render pick its own default risks a
+      # source build or an outright resolution failure.
+      - key: PYTHON_VERSION
+        value: 3.14.7
+      # GeneralClass.py imports matplotlib.pyplot at module load even though nothing in
+      # the web path draws with it. Agg stops it probing for a GUI backend it will never
+      # find in a container.
+      - key: MPLBACKEND
+        value: Agg
+      # Without a writable cache directory matplotlib rebuilds its font cache on every
+      # cold start and logs a warning while doing it. Render's filesystem is ephemeral,
+      # so /tmp is the honest place for a cache that is allowed to disappear.
+      - key: MPLCONFIGDIR
+        value: /tmp/matplotlib
+      # Turn on once the report-only CSP in app.py has been observed reporting nothing.
+      - key: CSP_ENFORCE
+        value: "false"
+      - key: PYTHONUNBUFFERED
+        value: "1"

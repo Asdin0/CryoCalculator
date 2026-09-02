@@ -1,0 +1,20 @@
+# Runtime dependencies. This is what Render installs.
+# Test-only packages (CoolProp, pytest) live in requirements-dev.txt so the deploy
+# does not build CoolProp, which is large and slow and is only ever used to check the
+# equation of state against a reference.
+#
+# Versions are pinned so a redeploy months from now installs what was tested. To bump:
+# relax the pin locally, run the app and StateFunctionCalculator/test, re-pin.
+
+# Web layer
+dash[compress]==4.1.0
+Flask-Compress==1.24
+plotly==6.7.0
+gunicorn==26.0.0
+
+# Imported by StateFunctionCalculator/general_class/GeneralClass.py at module load,
+# so they are required even though the interface never draws with matplotlib.
+sympy==1.14.0
+pandas==3.0.3
+matplotlib==3.10.9
+numpy==2.4.5

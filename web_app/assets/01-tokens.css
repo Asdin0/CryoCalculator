@@ -1,0 +1,77 @@
+:root {
+
+  --paper:        #e9edeb;
+  --paper-inset:  #dfe4e1;
+  --paper-deep:   #d5dbd7;
+  --ink:          #121a19;
+  --ink-2:        #3d4947;
+  --ink-3:        #5c6866;
+  --rule:         #b9c2be;
+
+  --rule-strong:  #6e7b78;
+
+  --field-vapor:         rgba(14, 139, 150, 0.20);
+  --field-liquid:        rgba(27, 63, 160, 0.20);
+  --field-gas:           rgba(47, 125, 79, 0.18);
+  --field-supercritical: rgba(107, 75, 143, 0.20);
+  --field-twophase:      rgba(217, 138, 31, 0.34);
+
+  --field-solid:         rgba(168, 80, 136, 0.20);
+
+  --vapor-ink:         #09656d;
+  --liquid-ink:        #1b3fa0;
+  --gas-ink:           #26643f;
+  --supercritical-ink: #694a8c;
+  --twophase-ink:      #7c4d0e;
+  --solid-ink:         #8a2f66;
+  --isochore-ink:      #b5302a;
+
+  --font-ui:    Archivo, system-ui, -apple-system, sans-serif;
+  --font-label: 'Archivo Narrow', Archivo, system-ui, sans-serif;
+  --font-data:  'Atkinson Hyperlegible Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --step--2: 0.6875rem;
+  --step--1: 0.8125rem;
+  --step-0:  0.9375rem;
+  --step-1:  1.0625rem;
+  --step-2:  1.375rem;
+  --step-3:  1.875rem;
+
+  --track-tight: -0.011em;
+  --track-label:  0.085em;
+
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+
+  --measure: 68ch;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 180ms;
+}
+
+@font-face {
+  font-family: 'Archivo';
+  src: url('fonts/archivo-latin-var.woff2') format('woff2-variations');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Archivo Narrow';
+  src: url('fonts/archivo-narrow-latin-var.woff2') format('woff2-variations');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible Mono';
+  src: url('fonts/atkinson-mono-latin-var.woff2') format('woff2-variations');
+  font-weight: 400 700;
+  font-display: swap;
+}
