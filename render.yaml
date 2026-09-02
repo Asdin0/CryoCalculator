@@ -11,10 +11,12 @@ services:
   - type: web
     name: cryocalculator
     runtime: python
-    # `starter` keeps the instance warm. `free` also has 512 MB and the same worker
-    # arithmetic holds, but it spins down after 15 minutes idle and the next visitor
-    # pays the full cold start: ~3.7 s of import and warm-up on top of the boot.
-    plan: starter
+    # `free` has the same 512 MB as `starter`, so the worker arithmetic above is
+    # unchanged. What it costs instead is latency: the instance spins down after 15
+    # minutes idle, and the next visitor pays the whole cold start - about 8 s measured
+    # with an empty matplotlib font cache, and longer on the free tier's 0.1 CPU.
+    # Switch to `starter` when someone other than you is meant to open the link.
+    plan: free
     region: frankfurt
     healthCheckPath: /healthz
     buildCommand: pip install -r requirements.txt
